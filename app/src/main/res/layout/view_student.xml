@@ -40,13 +40,13 @@
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="horizontal">
-        <ImageView
+        <ImageButton
             android:id="@+id/edit"
             android:layout_width="0dp"
             android:layout_height="70dp"
             android:src="@drawable/edit"
             android:layout_weight="1"/>
-        <ImageView
+        <ImageButton
             android:id="@+id/delete"
             android:layout_width="0dp"
             android:layout_height="70dp"

@@ -8,6 +8,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.example.roomdatabase.db.StudentDB
+import com.example.roomdatabase.entity.User
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -31,11 +37,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id){
             R.id.btnlogin->{
-                    val intent = Intent(
-                        this,
-                        DashboardActivity::class.java
-                    )
-                    startActivity(intent)
+                login()
             }
             R.id.tvsignup->{
                 val intent = Intent(
@@ -44,6 +46,33 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 )
                 startActivity(intent)
             }
+        }
+    }
+     fun login(){
+        val username = etusername.text.toString()
+        val password = etpassword.text.toString()
+
+        var user: User? = null
+        CoroutineScope(Dispatchers.IO).launch {
+            user = StudentDB
+                .getInstance(this@MainActivity)
+                .getUserDAO()
+                .checkUser(username,password)
+            if(user == null){
+                withContext(Dispatchers.Main){
+                    Toast.makeText(this@MainActivity, "Invalid User", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+            else{
+                withContext(Dispatchers.Main){
+                    Toast.makeText(this@MainActivity, "Login Sucessful", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                startActivity(Intent(this@MainActivity,
+                DashboardActivity::class.java))
+            }
+
         }
     }
 }
